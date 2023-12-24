@@ -44,7 +44,14 @@ export const ListTodo = () => {
           show={!!recordModalUpdate}
         />
       )}
-      <div>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "0 0 8px 0",
+        }}
+      >
         <Button
           onClick={(event) => {
             event.stopPropagation();
