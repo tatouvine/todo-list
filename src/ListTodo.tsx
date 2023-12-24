@@ -1,28 +1,94 @@
-import { Collapse, Button } from "antd";
+import { Collapse, Button, Row, Col } from "antd";
+import { ModalCreate } from "./modal/ModalCreate";
+import { useState } from "react";
+import { Todo } from "./utils";
+import { listTodo } from "./TodoSlice";
+import { ModalDelete } from "./modal/ModalDelete";
+import { ModalUpdate } from "./modal/ModalUpdate";
 
 export const ListTodo = () => {
-  const { data } = {
-    data: [
-      { id: "my-id1", title: "my-title1", description: "bla bla bla" },
-      { id: "my-id2", title: "my-title2", description: "bla bla bla" },
-      { id: "my-id3", title: "my-title3", description: "bla bla bla" },
-    ],
-  }; // getTodo();
+  const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
+
+  const [recordDeleteTodo, setRecordDeleteTodo] = useState<Todo | undefined>(
+    undefined,
+  );
+
+  const [recordModalUpdate, setRecordModalUpdate] = useState<Todo | undefined>(
+    undefined,
+  );
+  const { data } = listTodo();
 
   return (
     <div>
+      <ModalCreate
+        onHide={() => {
+          setIsModalCreateOpen(false);
+        }}
+        show={isModalCreateOpen}
+      />
+      {recordDeleteTodo && (
+        <ModalDelete
+          record={recordDeleteTodo}
+          show={!!recordDeleteTodo}
+          onHide={() => {
+            setRecordDeleteTodo(undefined);
+          }}
+        />
+      )}
+      {recordModalUpdate && (
+        <ModalUpdate
+          onHide={() => {
+            setRecordModalUpdate(undefined);
+          }}
+          record={recordModalUpdate}
+          show={!!recordModalUpdate}
+        />
+      )}
+
       <div>
         <Collapse
-          items={data.map(({ id, title, description }) => ({
-            id,
-            label: title,
-            children: <p>{description}</p>,
-            extra: <Button danger={true}>Delete</Button>,
+          items={data.map((todo) => ({
+            id: todo.id,
+            key: todo.id,
+            label: todo.title,
+            children: <p>{todo.description}</p>,
+            extra: (
+              <Row gutter={[16, 0]}>
+                <Col>
+                  <Button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setRecordModalUpdate(todo);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    danger={true}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setRecordDeleteTodo(todo);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Col>
+              </Row>
+            ),
           }))}
         />
       </div>
       <div>
-        <Button>Create</Button>
+        <Button
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsModalCreateOpen(true);
+          }}
+        >
+          Create
+        </Button>
       </div>
     </div>
   );
