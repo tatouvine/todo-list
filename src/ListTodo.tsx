@@ -44,8 +44,17 @@ export const ListTodo = () => {
           show={!!recordModalUpdate}
         />
       )}
-
       <div>
+        <Button
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsModalCreateOpen(true);
+          }}
+        >
+          Create
+        </Button>
+      </div>
+      <div style={{ overflow: "auto" }}>
         <Collapse
           items={data.map((todo) => ({
             id: todo.id,
@@ -79,16 +88,6 @@ export const ListTodo = () => {
             ),
           }))}
         />
-      </div>
-      <div>
-        <Button
-          onClick={(event) => {
-            event.stopPropagation();
-            setIsModalCreateOpen(true);
-          }}
-        >
-          Create
-        </Button>
       </div>
     </div>
   );
