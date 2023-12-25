@@ -1,4 +1,4 @@
-import { Collapse, Button, Row, Col } from "antd";
+import { Collapse, Button, Row, Col, Dropdown } from "antd";
 import { ModalCreate } from "./modal/ModalCreate";
 import { useState } from "react";
 import { Todo } from "./utils";
@@ -6,6 +6,7 @@ import { listTodo } from "./TodoSlice";
 import { ModalDelete } from "./modal/ModalDelete";
 import { ModalUpdate } from "./modal/ModalUpdate";
 import { useTranslation } from "react-i18next";
+import { SettingOutlined } from "@ant-design/icons";
 
 export const ListTodo = () => {
   const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
@@ -72,29 +73,38 @@ export const ListTodo = () => {
             label: todo.title,
             children: <p>{todo.description}</p>,
             extra: (
-              <Row gutter={[16, 0]}>
-                <Col>
-                  <Button
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setRecordModalUpdate(todo);
-                    }}
-                  >
-                    {t("common.edit")}
-                  </Button>
-                </Col>
-                <Col>
-                  <Button
-                    danger={true}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setRecordDeleteTodo(todo);
-                    }}
-                  >
-                    {t("common.delete")}
-                  </Button>
-                </Col>
-              </Row>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: t("common.edit"),
+                      key: "edit",
+                      onClick: (event) => {
+                        event.domEvent.stopPropagation();
+                        setRecordModalUpdate(todo);
+                      },
+                    },
+                    {
+                      label: t("common.delete"),
+                      key: "delete",
+                      onClick: (event) => {
+                        event.domEvent.stopPropagation();
+                        setRecordDeleteTodo(todo);
+                      },
+                    },
+                  ],
+                }}
+                trigger={["click"]}
+              >
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <SettingOutlined />
+                </a>
+              </Dropdown>
             ),
           }))}
         />
