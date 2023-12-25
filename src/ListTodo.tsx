@@ -5,6 +5,7 @@ import { Todo } from "./utils";
 import { listTodo } from "./TodoSlice";
 import { ModalDelete } from "./modal/ModalDelete";
 import { ModalUpdate } from "./modal/ModalUpdate";
+import { useTranslation } from "react-i18next";
 
 export const ListTodo = () => {
   const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
@@ -17,6 +18,8 @@ export const ListTodo = () => {
     undefined,
   );
   const { data } = listTodo();
+
+  const [t] = useTranslation("global");
 
   return (
     <div>
@@ -58,7 +61,7 @@ export const ListTodo = () => {
             setIsModalCreateOpen(true);
           }}
         >
-          Create
+          {t("common.create")}
         </Button>
       </div>
       <div style={{ overflow: "auto" }}>
@@ -77,7 +80,7 @@ export const ListTodo = () => {
                       setRecordModalUpdate(todo);
                     }}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                 </Col>
                 <Col>
@@ -88,7 +91,7 @@ export const ListTodo = () => {
                       setRecordDeleteTodo(todo);
                     }}
                   >
-                    Delete
+                    {t("common.delete")}
                   </Button>
                 </Col>
               </Row>
