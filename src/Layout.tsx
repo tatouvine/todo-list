@@ -1,5 +1,4 @@
 import React, { FC, PropsWithChildren } from "react";
-import { Content } from "antd/es/layout/layout";
 import { ChangeLanguage } from "./ChangeLanguage";
 
 export type LayoutProps = PropsWithChildren & {};
