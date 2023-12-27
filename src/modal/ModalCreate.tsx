@@ -3,7 +3,7 @@ import { Input, Modal, Typography } from "antd";
 import { CreateTodo, Todo } from "../utils";
 import { v4 as uuid } from "uuid";
 import { Controller, useForm } from "react-hook-form";
-import { createTodo } from "../TodoSlice";
+import { useCreateTodo } from "../TodoSlice";
 import { useTranslation } from "react-i18next";
 
 export type ModalCreateProps = {
@@ -14,14 +14,16 @@ export type ModalCreateProps = {
 export const ModalCreate: FC<ModalCreateProps> = ({ show, onHide }) => {
   const [t] = useTranslation("global");
   const { control, handleSubmit, reset } = useForm<CreateTodo>();
+  const { mutate } = useCreateTodo();
 
   const onSubmit = handleSubmit(({ title, description }) => {
     const res: Todo = {
       id: uuid(),
       title: title,
       description: description,
+      checked: false,
     };
-    createTodo(res);
+    mutate(res);
     onHide();
     reset();
   });

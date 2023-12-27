@@ -5,4 +5,5 @@ export type Todo = CreateTodo & {
 export type CreateTodo = {
   title: string;
   description: string;
+  checked: boolean;
 };

@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Todo } from "../utils";
 import { Input, Modal, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
-import { updateTodo } from "../TodoSlice";
+import { useUpdateTodo } from "../TodoSlice";
 import { useTranslation } from "react-i18next";
 
 export type ModalUpdateProps = {
@@ -16,11 +16,13 @@ export const ModalUpdate: FC<ModalUpdateProps> = ({ onHide, show, record }) => {
 
   const { control, handleSubmit } = useForm<Todo>({ defaultValues: record });
 
+  const { mutate } = useUpdateTodo();
+
   const onSubmit = handleSubmit((dataUpdate) => {
     const res: Todo = {
       ...dataUpdate,
     };
-    updateTodo(res);
+    mutate(res);
     onHide();
   });
 

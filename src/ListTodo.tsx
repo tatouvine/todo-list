@@ -1,12 +1,13 @@
-import { Collapse, Button, Dropdown } from "antd";
+import { Collapse, Button, Dropdown, Col, Checkbox, theme } from "antd";
 import { ModalCreate } from "./modal/ModalCreate";
 import { useState } from "react";
 import { Todo } from "./utils";
-import { listTodo } from "./TodoSlice";
 import { ModalDelete } from "./modal/ModalDelete";
 import { ModalUpdate } from "./modal/ModalUpdate";
 import { useTranslation } from "react-i18next";
 import { SettingOutlined } from "@ant-design/icons";
+import * as React from "react";
+import { useListTodo, useUpdateCheckTodo } from "./TodoSlice";
 
 export const ListTodo = () => {
   const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
@@ -18,9 +19,12 @@ export const ListTodo = () => {
   const [recordModalUpdate, setRecordModalUpdate] = useState<Todo | undefined>(
     undefined,
   );
-  const { data } = listTodo();
 
   const [t] = useTranslation("global");
+
+  const { data } = useListTodo();
+  const { mutate } = useUpdateCheckTodo();
+  const { token } = theme.useToken();
 
   return (
     <div>
@@ -65,46 +69,63 @@ export const ListTodo = () => {
           {t("common.create")}
         </Button>
       </div>
-      <div style={{ overflow: "auto" }}>
+      <div style={{ overflow: "auto", width: "100%" }}>
         <Collapse
-          items={data.map((todo) => ({
+          style={{ width: "100%" }}
+          items={data?.map((todo, index) => ({
             id: todo.id,
             key: todo.id,
             label: todo.title,
             children: <p>{todo.description}</p>,
             extra: (
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      label: t("common.edit"),
-                      key: "edit",
-                      onClick: (event) => {
-                        event.domEvent.stopPropagation();
-                        setRecordModalUpdate(todo);
+              <>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        label: t("common.edit"),
+                        key: "edit",
+                        onClick: (event) => {
+                          event.domEvent.stopPropagation();
+                          setRecordModalUpdate(todo);
+                        },
                       },
-                    },
-                    {
-                      label: t("common.delete"),
-                      key: "delete",
-                      onClick: (event) => {
-                        event.domEvent.stopPropagation();
-                        setRecordDeleteTodo(todo);
+                      {
+                        label: t("common.delete"),
+                        key: "delete",
+                        onClick: (event) => {
+                          event.domEvent.stopPropagation();
+                          setRecordDeleteTodo(todo);
+                        },
                       },
-                    },
-                  ],
-                }}
-                trigger={["click"]}
-              >
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    ],
                   }}
+                  trigger={["click"]}
                 >
-                  <SettingOutlined />
-                </a>
-              </Dropdown>
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                  >
+                    <SettingOutlined />
+                  </a>
+                </Dropdown>
+                <Checkbox
+                  style={{ marginLeft: 10 }}
+                  checked={todo.checked}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  onChange={(event) => {
+                    event.stopPropagation();
+                    mutate({
+                      idTodo: todo.id,
+                      checked: event.target.checked,
+                    });
+                  }}
+                />
+              </>
             ),
           }))}
         />
