@@ -20,10 +20,10 @@
       "description": "Are you sure you want to delete this todo?"
     },
     "common": {
-      "cancel": "Annuler",
-      "create": "Créer",
-      "update": "Mettre à jour",
-      "delete": "Supprimer"
+      "cancel": "Cancel",
+      "create": "Create",
+      "update": "Update",
+      "delete": "Delete"
     }
   },
   "form": {

@@ -20,10 +20,10 @@
       "description": "Êtes-vous sûr de vouloir supprimer cette tâche ?"
     },
     "common": {
-      "cancel": "Cancel",
-      "create": "Create",
-      "update": "Update",
-      "delete": "Delete"
+      "cancel": "Annuler",
+      "create": "Créer",
+      "update": "Mettre à jour",
+      "delete": "Supprimer"
     }
   },
   "form": {
